@@ -10,6 +10,9 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import {CssBaseline} from "@mui/material";
+import {FirebaseAppProvider} from "reactfire";
+import {firebaseConfig} from "../firebaseConfig.js";
+import {FirestoreProvider} from "reactfire/src/sdk.js";
 
 const router = createBrowserRouter([
     {
@@ -30,10 +33,21 @@ const router = createBrowserRouter([
     },
 ]);
 
+function App() {
+    const firestoreInstance = getFirestore(useFirebaseApp());
+
+    return (
+        <FirestoreProvider sdk={firestoreInstance}>
+            <CssBaseline/>
+            <RouterProvider router={router}/>
+        </FirestoreProvider>
+    );
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <CssBaseline />
-        <RouterProvider router={router}/>
+        <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+            <App/>
+        </FirebaseAppProvider>
     </React.StrictMode>
-)
+);
