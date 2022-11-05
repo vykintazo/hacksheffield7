@@ -13,9 +13,10 @@ const commonStyles = {
 
 const initialValue = {
   type: "discount",
+  offerName: "",
   category: "",
-  startDate: new Date(),
-  endDate: startOfDay(addDays(new Date(), 1)),
+  start: new Date(),
+  end: startOfDay(addDays(new Date(), 1)),
   discount: 10,
   availability: 10,
   description: ""
@@ -35,6 +36,7 @@ const types = [
 
 let userSchema = object({
   type: string().required(),
+  offerName: string().required(),
   category: string().required(),
   startDate: date(),
   endDate: date(),
@@ -46,6 +48,7 @@ let userSchema = object({
 
 let userSchemaDescription = object({
   type: string().required(),
+  offerName: string().required(),
   category: string().required(),
   startDate: date(),
   endDate: date(),
@@ -94,6 +97,20 @@ const handleClose = () => {
         <DialogTitle>Add Offer</DialogTitle>
         <DialogContent>
           <Grid container sx={{ my: 1 }} spacing={2}>
+          <Grid item xs={12}>
+              <FormField
+                sx={commonStyles}
+                error={errors}
+                id="name"
+                label="offerName"
+                customLabel="Offer Name"
+                type="text"
+                fullWidth
+                value={value}
+                onChange={setValue}
+              />
+            </Grid>
+
             <Grid item xs={12}>
               <FormField
                 select
@@ -108,7 +125,6 @@ const handleClose = () => {
               </FormField>
 
             </Grid>
-
             
             <Grid item xs={12}>
 
@@ -136,6 +152,7 @@ const handleClose = () => {
                 value={value}
                 onChange={setValue}
                 isEvent={false}
+                inputFormat="yyyy-MM-dd HH:mm"
 
               />
             </Grid>
@@ -149,6 +166,7 @@ const handleClose = () => {
                 value={value}
                 onChange={setValue}
                 isEvent={false}
+                inputFormat="yyyy-MM-dd HH:mm"
               />
             </Grid>
 

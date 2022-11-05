@@ -3,7 +3,7 @@ import {FormControl, FormHelperText, FormLabel, TextField} from "@mui/material";
 const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1)
 
 export default function FormField(
-    {value, error, label, formControl, onChange, isEvent = true, component: Component=TextField, ...rest}
+    {value, error, label, formControl, onChange, isEvent = true, component: Component=TextField, customLabel, ...rest}
 ) {
 
     const handleChange = (value) => { 
@@ -14,9 +14,9 @@ export default function FormField(
 
     return formControl ? (
         <FormControl fullWidth error={error ? error[label]?.length > 0 : undefined}>
-            <FormLabel>{capitalize(label)}</FormLabel>
+            <FormLabel>{capitalize(customLabel || label)}</FormLabel>
             <Component
-                label={capitalize(label)}
+                label={capitalize(customLabel || label)}
                 value={value[label]}
                 onChange={handleChange}
                 {...rest}
@@ -25,7 +25,7 @@ export default function FormField(
         </FormControl>
     ) : (
         <Component
-            label={capitalize(label)}
+            label={capitalize(customLabel || label)}
             value={value[label]}
             onChange={handleChange}
             error={error ? error[label]?.length > 0 : undefined}
