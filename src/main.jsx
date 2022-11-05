@@ -16,9 +16,13 @@ import { firebaseConfig } from "../firebaseConfig.js";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import 'mapbox-gl/dist/mapbox-gl.css';
+
 import SignInChecker from "./SignInChecker"
 import InitialForm from './InitialForm';
 import Form from "./Form";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
 
 function App() {
     const router = createBrowserRouter([
@@ -65,8 +69,10 @@ function App() {
     return (
         <AuthProvider sdk={auth}>
             <FirestoreProvider sdk={firestoreInstance}>
-                <CssBaseline />
-                <RouterProvider router={router} />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <CssBaseline />
+                    <RouterProvider router={router} />
+                </LocalizationProvider>
             </FirestoreProvider>
         </AuthProvider>
     );
