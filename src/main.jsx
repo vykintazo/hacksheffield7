@@ -48,10 +48,10 @@ function App() {
         <AuthProvider sdk={auth}>
             <FirestoreProvider sdk={firestoreInstance}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <CssBaseline />
-                <RouterProvider router={router} />
+                    <CssBaseline />
+                    <RouterProvider router={router} />
                 </LocalizationProvider>
-        </FirestoreProvider>
+            </FirestoreProvider>
         </AuthProvider>
     );
 }

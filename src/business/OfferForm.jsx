@@ -52,8 +52,8 @@ let userSchemaDescription = object({
 
 
 
-export default function OfferForm() {
-  const [open, setOpen] = useState(false);
+export default function OfferForm({open, onClose}) {
+
 
   const [value, setValue] = useState(initialValue);
 
@@ -61,19 +61,16 @@ export default function OfferForm() {
     {}
   );
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setValue(initialValue)
-    setOpen(false);
-  };
-
+const handleClose = () => {
+  setValue(initialValue)
+  setErrors({})
+  onClose()
+}
 
 
   const handleAdd = async () => {
     console.log(value)
+    setErrors({})
     const errs = await validate(userSchema, value);
     
     console.log(errs);
@@ -88,12 +85,9 @@ export default function OfferForm() {
       }
     }
   }
-  
+
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Offer</DialogTitle>
         <DialogContent>
