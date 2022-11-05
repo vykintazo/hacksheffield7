@@ -1,7 +1,16 @@
-import Map, {GeolocateControl} from "react-map-gl";
+import Map, {GeolocateControl, Marker} from "react-map-gl";
 import MenuBar from "./MenuBar";
+import VenueMarker from "../components/VenueMarker";
 
 export default function CustomerPage() {
+
+    const markers = [
+        {location: [53.38089284303829, -1.4766664972820758], label: "Molly Malone's Irish Tavern"},
+        {location: [53.379374277675964, -1.4702493564818155], label: "Costa Coffee"},
+        {location: [53.38020004206791, -1.4792187983038223], label: "KFC Sheffield"},
+        {location: [53.380888801054645, -1.479620700831369], label: "The Red Deer"},
+    ]
+
     return (
         <div>
             <Map
@@ -22,6 +31,15 @@ export default function CustomerPage() {
                         marginBottom: 40
                     }}
                 />
+                {markers.map((marker, i) => (
+                    <VenueMarker
+                        key={i}
+                        lon={marker.location[1]}
+                        lat={marker.location[0]}
+                        label={marker.label}
+                        offerCount={5}
+                    />
+                ))}
             </Map>
 
         </div>
