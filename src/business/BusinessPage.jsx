@@ -1,5 +1,8 @@
+import Dashboard from "./Dashboard";
+
 export default function BusinessPage({ prop1 }) {
 
-
-    return <div>{prop1}</div>;
+    return (
+    <div><Dashboard/></div>
+    )
 }
