@@ -14,6 +14,8 @@ import {FirebaseAppProvider, FirestoreProvider, useFirebaseApp} from "reactfire"
 import {firebaseConfig} from "../firebaseConfig.js";
 import {getFirestore} from 'firebase/firestore';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 
 const router = createBrowserRouter([
@@ -40,8 +42,10 @@ function App() {
 
     return (
         <FirestoreProvider sdk={firestoreInstance}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
             <CssBaseline/>
             <RouterProvider router={router}/>
+            </LocalizationProvider>
         </FirestoreProvider>
     );
 }
