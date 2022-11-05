@@ -14,10 +14,12 @@
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.12",
+    "firebase": "^9.13.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-map-gl": "^7.0.19",
-    "react-router-dom": "^6.4.3"
+    "react-router-dom": "^6.4.3",
+    "reactfire": "^4.2.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.22",
