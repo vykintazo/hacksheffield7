@@ -1,4 +1,4 @@
-import Map from "react-map-gl";
+import Map, {GeolocateControl} from "react-map-gl";
 import MenuBar from "./MenuBar";
 
 export default function CustomerPage() {
@@ -14,7 +14,14 @@ export default function CustomerPage() {
                 mapStyle="mapbox://styles/illuminatiboat/cla42292y00ns14p07a4ipgzp"
                 mapboxAccessToken="pk.eyJ1IjoiaWxsdW1pbmF0aWJvYXQiLCJhIjoiY2poMjh5eWRhMDFxODJxbXJuaXRvMmJtdCJ9.wiImXdAqSjsqZTaaG5VvXQ"
             >
-            <MenuBar/>
+                <MenuBar/>
+                <GeolocateControl
+                    trackUserLocation={true}
+                    position="bottom-right"
+                    style={{
+                        marginBottom: 40
+                    }}
+                />
             </Map>
 
         </div>

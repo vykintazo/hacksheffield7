@@ -38,8 +38,9 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    const auth = getAuth(useFirebaseApp());
-    const firestoreInstance = getFirestore(useFirebaseApp());
+    const firebaseApp = useFirebaseApp()
+    const auth = getAuth(firebaseApp);
+    const firestoreInstance = getFirestore(firebaseApp);
 
     return (
         <AuthProvider sdk={auth}>
