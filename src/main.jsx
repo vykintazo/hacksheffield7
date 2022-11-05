@@ -13,6 +13,7 @@ import {CssBaseline} from "@mui/material";
 import {FirebaseAppProvider, FirestoreProvider, useFirebaseApp} from "reactfire";
 import {firebaseConfig} from "../firebaseConfig.js";
 import {getFirestore} from 'firebase/firestore';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 const router = createBrowserRouter([
