@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import { useFirestore, useFirestoreCollectionData } from 'reactfire';
 import { collection, query } from "firebase/firestore"; 
 import { CircularProgress } from '@mui/material';
+import { format } from "date-fns";
 
 export default function BasicTable() {
 
@@ -21,9 +22,14 @@ export default function BasicTable() {
         idField: 'id', // this field will be added to the object created from each document
       });
 
+      // [DEBUG] log the data
+    //   useEffect(() => {
+    //     console.log(data);
+    //   }), [data];
+
       return (
         <>
-            <Typography variant="h1" sx={{textAlign: 'center'}}>Company Name</Typography>;
+            <Typography variant="h1" sx={{textAlign: 'center'}}>Company Name </Typography>;
             { status === 'loading' ? <CircularProgress/> : 
 
             <TableContainer component={Paper}>
@@ -34,23 +40,22 @@ export default function BasicTable() {
                         aria-label="simple table">
                     <TableHead>
                     <TableRow>
-                        <TableCell align="right">offerName</TableCell>
-                        <TableCell align="right">startTime</TableCell>
-                        <TableCell align="right">endTime</TableCell>
-                        <TableCell align="right">discountAmount</TableCell>
-                        <TableCell align="right">numAvailable</TableCell>
-                        <TableCell align="right">description</TableCell>
+                        <TableCell align="right">Offer Name</TableCell>
+                        <TableCell align="right">Start Time</TableCell>
+                        <TableCell align="right">End TIme</TableCell>
+                        <TableCell align="right">Discount Amount</TableCell>
+                        <TableCell align="right">Number Available</TableCell>
+                        <TableCell align="right">Description</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
-                    {status ==='loading' ? <CircularProgress /> : data.map((offer, i) => (
-                        <TableRow
-                        key={i} >
-                            <TableCell align="right">{offer.offerName}</TableCell>
 
-                            <TableCell align="right">{(Date(offer.startTime?.seconds))}</TableCell>
-                            <TableCell align="right">{(Date(offer.endTime?.seconds))}</TableCell>
-  
+                    {status ==='loading' ? <CircularProgress /> : data.map((offer, id) => (
+                        <TableRow
+                        key={id} >
+                            <TableCell align="right">{offer.offerName}</TableCell>
+                            <TableCell align="right">{(format((offer.startTime?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
+                            <TableCell align="right">{(format((offer.endTime?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
                             <TableCell align="right">{offer.discountAmount}</TableCell>
                             <TableCell align="right">{offer.numAvailable}</TableCell>
                             <TableCell align="right">{offer.description}</TableCell>
