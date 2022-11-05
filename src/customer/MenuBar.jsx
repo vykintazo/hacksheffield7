@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import {Button} from "@mui/material";
 
 const drawerBleeding = 56;
 
@@ -20,7 +21,7 @@ const Puller = styled(Box)(({ theme }) => ({
   borderRadius: 3,
   position: 'absolute',
   top: 8,
-  left: 'calc(50% - 15px)',
+  left: 'calc(50% - 15px)'
 }));
 
 export default function SwipeableEdgeDrawer() {
@@ -32,6 +33,7 @@ export default function SwipeableEdgeDrawer() {
 
   return (
     <div>
+        <Button onClick= {toggleDrawer(true)}>Open</Button>
       <Global
         styles={{
           '.MuiDrawer-root > .MuiPaper-root': {
@@ -51,9 +53,6 @@ export default function SwipeableEdgeDrawer() {
         ModalProps={{
           keepMounted: true,
         }}
-        sx={{
-            zIndex: 5000
-        }}
       >
         <StyledBox
           sx={{
@@ -67,9 +66,7 @@ export default function SwipeableEdgeDrawer() {
             left: 0
           }}
         >
-          <Puller 
-            onClick= {() => toggleDrawer(true) }
-          />
+          <Puller/>
           <Typography sx={{ p: 2, color: 'text.secondary' }}>Nearby Offers</Typography>
         </StyledBox>
         <StyledBox
