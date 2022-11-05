@@ -17,7 +17,6 @@ export default function AuthPage() {
     const [loaded, setLoaded] = useState(false);
 
     const { status, data: signInCheckResult } = useSigninCheck();
-    console.log(signInCheckResult);
 
     const uiConfig = {
         callbacks: {
