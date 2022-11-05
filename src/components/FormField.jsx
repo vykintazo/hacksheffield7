@@ -13,7 +13,7 @@ export default function FormField(
 
 
     return formControl ? (
-        <FormControl fullWidth error={error ? error[label]?.length > 0 : false}>
+        <FormControl fullWidth error={error ? error[label]?.length > 0 : undefined}>
             <FormLabel>{capitalize(label)}</FormLabel>
             <Component
                 label={capitalize(label)}
@@ -28,8 +28,8 @@ export default function FormField(
             label={capitalize(label)}
             value={value[label]}
             onChange={handleChange}
-            error={error ? error[label]?.length > 0 : false}
-            helperText={(error && error[label]?.length > 0) ? error[label]?.join(", ") : ""}
+            error={error ? error[label]?.length > 0 : undefined}
+            helperText={(error && error[label]?.length > 0) ? error[label]?.join(", ") : undefined}
             {...rest}
         />
     )
