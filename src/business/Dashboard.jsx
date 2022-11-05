@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -62,10 +61,10 @@ export default function BasicTable() {
                                 <TableRow
                                     key={i} >
                                     <TableCell align="right">{offer.offerName}</TableCell>
-                                    <TableCell align="right">{(format((offer.startTime?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
-                                    <TableCell align="right">{(format((offer.endTime?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
-                                    <TableCell align="right">{offer.discountAmount}</TableCell>
-                                    <TableCell align="right">{offer.numAvailable}</TableCell>
+                                    <TableCell align="right">{(format((offer.start?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
+                                    <TableCell align="right">{(format((offer.end?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
+                                    <TableCell align="right">{offer.discount}</TableCell>
+                                    <TableCell align="right">{offer.availability}</TableCell>
                                     <TableCell align="right">{offer.description}</TableCell>
                                     <TableCell align="right"><IconButton aria-label="delete" onClick={() => { deleteOffer(offer.id) }}><DeleteIcon /></IconButton></TableCell>
                                 </TableRow>
