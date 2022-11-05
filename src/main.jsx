@@ -9,11 +9,13 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+
 import { CssBaseline } from "@mui/material";
 import { FirebaseAppProvider, FirestoreProvider, useFirebaseApp, AuthProvider } from "reactfire";
 import { firebaseConfig } from "../firebaseConfig.js";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 
 const router = createBrowserRouter([
@@ -27,7 +29,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/business",
-        element: <BusinessPage prop1={"test"} />,
+        element: <BusinessPage />,
     },
     {
         path: "/auth",
