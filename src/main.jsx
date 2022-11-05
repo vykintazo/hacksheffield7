@@ -10,9 +10,10 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import {CssBaseline} from "@mui/material";
-import {FirebaseAppProvider} from "reactfire";
+import {FirebaseAppProvider, FirestoreProvider, useFirebaseApp} from "reactfire";
 import {firebaseConfig} from "../firebaseConfig.js";
-import {FirestoreProvider} from "reactfire/src/sdk.js";
+import {getFirestore} from 'firebase/firestore';
+
 
 const router = createBrowserRouter([
     {
