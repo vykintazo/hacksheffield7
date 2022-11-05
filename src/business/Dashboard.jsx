@@ -15,25 +15,23 @@ import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function BasicTable() {
+    // [DEBUG] log the data
+    //   useEffect(() => {
+    //     console.log(data);
+    //   }), [data];
 
     const firestore = useFirestore();
     const offerCollection = collection(firestore, 'offers');
     const offersQuery = query(offerCollection);
 
-    const deleteOffer = async (id) => {
-        // id = id + "";
-        console.log(id);
-        await deleteDoc(doc(firestore, "offers", id));
-    }
-
     const { status, data } = useFirestoreCollectionData(offersQuery, {
         idField: 'id', // this field will be added to the object created from each document
     });
 
-    // [DEBUG] log the data
-    //   useEffect(() => {
-    //     console.log(data);
-    //   }), [data];
+    const deleteOffer = async (id) => {
+        console.log(id);
+        await deleteDoc(doc(firestore, "offers", id));
+    }
 
     return (
         <>
