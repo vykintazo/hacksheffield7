@@ -3,7 +3,7 @@
       "moduleResolution": "NodeNext",
       "module": "ES6",
       "jsx": "preserve",
-      "checkJs": false,
+      "checkJs": true,
       "baseUrl": "./src"
     },
     "exclude": ["node_modules", "**/node_modules/*"]

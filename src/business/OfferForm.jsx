@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormHelperText, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControl, FormHelperText, Grid, InputAdornment, InputLabel, MenuItem, Select, Slider, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { DateTimePicker, StaticDatePicker } from '@mui/x-date-pickers';
 import { addDays, startOfDay } from 'date-fns';
@@ -12,11 +12,11 @@ const commonStyles = {
 }
 
 const initialValue = {
-  type: "",
+  type: "discount",
   category: "",
   startDate: new Date(),
   endDate: startOfDay(addDays(new Date(), 1)),
-  discount: -10,
+  discount: 10,
   availability: 10,
   description: ""
 }
@@ -46,8 +46,10 @@ let userSchema = object({
 
 let userSchemaDescription = object({
   type: string().required(),
+  category: string().required(),
+  startDate: date(),
+  endDate: date(),
   description: string().required()
-
 });
 
 
@@ -107,7 +109,7 @@ const handleClose = () => {
 
             </Grid>
 
-            {value.type === "discount" && (<>
+            
             <Grid item xs={12}>
 
               <FormField
@@ -150,15 +152,19 @@ const handleClose = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
-              <FormField
-                sx={commonStyles}
-                error={errors}
-                autoFocus
-                margin="dense"
-                id="name"
+            {value.type === "discount" && (<>
+            <Grid item xs={12}>
+            <Typography id="input-slider" gutterBottom>
+                Discount
+              </Typography>
+              <FormField 
+                valueLabelFormat={(val) => `${val} %`}
+                component={Slider}
+                defaultValue={30}
+                min={5}
+                max={90}
+                sx={{...commonStyles, mt: 4}}
                 label="discount"
-                type="number"
                 fullWidth
                 variant="standard"
                 value={value}
@@ -167,20 +173,17 @@ const handleClose = () => {
                   endAdornment: <InputAdornment position="start">%</InputAdornment>,
                 }}
                 helperText="Incorrect entry."
+                valueLabelDisplay="on"
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <FormField
                 sx={commonStyles}
                 error={errors}
-                autoFocus
-                margin="dense"
-                id="name"
                 label="availability"
                 type="number"
                 fullWidth
-                variant="standard"
                 value={value}
                 onChange={setValue}
               />
