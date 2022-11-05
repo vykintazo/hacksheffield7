@@ -11,7 +11,7 @@ export default () => {
     const { data: signInCheckResult } = useSigninCheck();
 
     const navigateTo = useNavigate();
-    signInCheckResult?.signedIn === "false" && navigateTo("/auth");
+    signInCheckResult?.signedIn === false && navigateTo("/auth");
 
     const authInstance = getAuth(useFirebaseApp());
 
@@ -32,7 +32,6 @@ export default () => {
 
                 setDisplayUserRoleSelection(true);
             })();
-
         }
 
         if (!(response?.status === "loading") && response?.data?.userRole === false) {
