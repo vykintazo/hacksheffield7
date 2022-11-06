@@ -6,7 +6,7 @@ import validate from "../utils/validate.js";
 
 
 const initialValue = {
-    businessName: "",
+    name: "",
     type: "",
     addressLine1: "",
     addressLine2: "",
@@ -21,7 +21,7 @@ const types = [
 ]
 
 let userSchema = object({
-    businessName: string().required(),
+    name: string().required(),
     type: string().required(),
     addressLine1: string().required(),
     addressLine2: string().required(),
