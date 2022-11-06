@@ -59,7 +59,7 @@ export default () => {
         navigateTo("/form");
     }
 
-    return <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", width: "100vw" }}>
+    return <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", width: "100vw", padding: "50px" }}>
         <Button onClick={() => authInstance.signOut()} variant="contained" sx={{ backgroundColor: "red", position: "absolute", top: 20, right: 20 }}>Log Out</Button>
         {!displayUserRoleSelection ? <CircularProgress /> : <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <Typography sx={{ marginBottom: "60px" }} component="h1" variant="h3">Who do you want to be?</Typography>
