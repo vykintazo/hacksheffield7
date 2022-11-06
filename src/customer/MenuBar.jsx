@@ -1,23 +1,25 @@
-import {useEffect, useState} from 'react';
-import {Global} from '@emotion/react';
-import {styled} from '@mui/material/styles';
-import {grey} from '@mui/material/colors';
+import { useEffect, useState } from 'react';
+import { Global } from '@emotion/react';
+import { styled } from '@mui/material/styles';
+import { grey } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import {Button, Divider, IconButton, List, ListItemButton, ListItemText, Stack} from "@mui/material";
-import {ArrowBack} from "@mui/icons-material";
+import { Button, Divider, IconButton, List, ListItemButton, ListItemText, Stack } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 import distance from "@turf/distance";
-import {capitalize} from "../components/FormField.jsx";
+import { capitalize } from "../components/FormField.jsx";
 import Countdown from "../business/Countdown.jsx"
+import { Fab } from "@mui/material";
+import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 
 const drawerBleeding = 86;
 
-const StyledBox = styled(Box)(({theme}) => ({
+const StyledBox = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
 }));
 
-const Puller = styled(Box)(({theme}) => ({
+const Puller = styled(Box)(({ theme }) => ({
     width: 30,
     height: 6,
     backgroundColor: theme.palette.mode === 'light' ? grey[300] : grey[900],
@@ -42,7 +44,7 @@ const getDistance = (currLocation, businessLocation, format = true) => {
     return `${kmDist.toFixed(1)} km`;
 }
 
-export default function MenuBar({businesses, offers, selectedBusiness, onSelectedBusinessChange, mapInstance}) {
+export default function MenuBar({ businesses, offers, selectedBusiness, onSelectedBusinessChange, mapInstance }) {
     const [open, setOpen] = useState(false);
 
     const toggleDrawer = (newOpen) => () => {
@@ -74,6 +76,9 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
         }
     }, []);
 
+    const handleGeoLocate = () => {
+        document.querySelector(".mapboxgl-ctrl-icon")?.click();
+    }
 
     return (
         <div>
@@ -88,11 +93,14 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
             <Box
                 onClick={toggleDrawer(true)}
                 sx={{
-                    display: {xs: "none", md: open ? "none" : "flex"}, justifyContent: "center", position: "absolute",
+                    display: { xs: "none", md: open ? "none" : "flex" }, justifyContent: "center", position: "absolute",
                     bottom: "51px", zIndex: "100000", width: "100vw"
                 }}>
                 <Button onClick={toggleDrawer(true)}>Open</Button>
             </Box>
+            <Fab sx={{ position: "absolute", bottom: "110px", right: "20px", zIndex: "100000" }} color='default' onClick={handleGeoLocate}>
+                <GpsFixedIcon />
+            </Fab>
             <SwipeableDrawer
                 anchor="bottom"
                 open={open}
@@ -116,8 +124,8 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
                         left: 0
                     }}
                 >
-                    <Puller sx={{display: {md: "none"}}}/>
-                    <Typography variant="h5" sx={{px: 2, py: 4}}>Nearby Offers</Typography>
+                    <Puller sx={{ display: { md: "none" } }} />
+                    <Typography variant="h5" sx={{ px: 2, py: 4 }}>Nearby Offers</Typography>
                 </StyledBox>
                 <StyledBox
                     sx={{
@@ -133,20 +141,20 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
                             const dB = getDistance(currentLocation, b.business.location, false);
                             return dA - dB;
                         }).map((businessUser) => {
-                            const {business, uid} = businessUser;
+                            const { business, uid } = businessUser;
                             const businessOffers = offers?.filter((offer) => offer.uid === uid);
                             return (
                                 <ListItemButton key={uid} onClick={() => {
                                     onSelectedBusinessChange(businessUser);
                                     mapInstance.current.flyTo({
                                         center: [business?.location?.lon,
-                                            business?.location?.lat],
+                                        business?.location?.lat],
                                         zoom: 17
                                     });
                                 }}>
                                     <ListItemText
                                         primary={business.name}
-                                        secondary={`${businessOffers.length} offer(s) available.`}/>
+                                        secondary={`${businessOffers.length} offer(s) available.`} />
                                     <Typography>
                                         {currentLocation ? getDistance(currentLocation, business.location) : ""}
                                     </Typography>
@@ -154,13 +162,13 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
                             )
                         })}
                     </List>) : (
-                        <Box sx={{width: '100%'}}>
-                            <Stack direction="row" alignItems="center" sx={{width: '100%'}}>
-                                <IconButton onClick={() => onSelectedBusinessChange(null)}><ArrowBack/></IconButton>
-                                <Stack direction="row" alignItems="baseline" sx={{flexGrow: 1}}>
+                        <Box sx={{ width: '100%' }}>
+                            <Stack direction="row" alignItems="center" sx={{ width: '100%' }}>
+                                <IconButton onClick={() => onSelectedBusinessChange(null)}><ArrowBack /></IconButton>
+                                <Stack direction="row" alignItems="baseline" sx={{ flexGrow: 1 }}>
                                     <Typography
                                         variant="h6"
-                                        sx={{mr: 1}}
+                                        sx={{ mr: 1 }}
                                     >
                                         {selectedBusiness.business.name}
                                     </Typography>
@@ -177,10 +185,10 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
                                     return (
                                         <ListItemButton key={offer.id} onClick={() => null}>
                                             <ListItemText
-                                                sx={{backgroundColor: countdownChange[offer.id] <= 0 ? "lightgray" : "inherit"}}
+                                                sx={{ backgroundColor: countdownChange[offer.id] <= 0 ? "lightgray" : "inherit" }}
                                                 disableTypography
                                                 primary={<><Typography variant="p"
-                                                                       sx={{color: "#b31f02", fontWeight: "700"}}>Time
+                                                    sx={{ color: "#b31f02", fontWeight: "700" }}>Time
                                                     left: <Countdown
                                                         targetDate={offer.end?.toDate()}
                                                         onCountdownChange={(change) => {
@@ -188,10 +196,10 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
                                                                 ...prev,
                                                                 [offer.id]: change
                                                             }))
-                                                        }}/></Typography><Divider/>
+                                                        }} /></Typography><Divider />
                                                     <Typography variant="body1">{offer.offerName}</Typography></>}
                                                 secondary={<Typography
-                                                    variant="body2">{offer.description}</Typography>}/>
+                                                    variant="body2">{offer.description}</Typography>} />
                                         </ListItemButton>
                                     )
                                 })}
