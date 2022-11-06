@@ -6,12 +6,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { useFirestore, useFirestoreCollectionData } from 'reactfire';
+import { useFirestore, useFirestoreCollectionData, useFirebaseApp, useSigninCheck } from 'reactfire';
 import { collection, query, doc, deleteDoc } from "firebase/firestore";
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Button, Box } from '@mui/material';
 import { format } from "date-fns";
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { getAuth } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function BasicTable() {
     // [DEBUG] log the data
@@ -27,53 +29,61 @@ export default function BasicTable() {
         idField: 'id', // this field will be added to the object created from each document
     });
 
+    const authInstance = getAuth(useFirebaseApp());
+
     const deleteOffer = async (id) => {
         console.log(id);
         await deleteDoc(doc(firestore, "offers", id));
     }
 
+    const { data: signInCheckResult } = useSigninCheck();
+
+    const navigateTo = useNavigate();
+    signInCheckResult?.signedIn === false && navigateTo("/auth");
+
     return (
-        <>
-            <Typography variant="h1" sx={{ textAlign: 'center' }}>Company Name </Typography>
-            {status === 'loading' ? <CircularProgress /> :
-
-                <TableContainer component={Paper}>
-                    <Table sx={{
-                        width: '80vw',
-                        marginLeft: 'auto',
-                        marginRight: 'auto'
-                    }}
-                        aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="right">Offer Name</TableCell>
-                                <TableCell align="right">Start Time</TableCell>
-                                <TableCell align="right">End TIme</TableCell>
-                                <TableCell align="right">Discount Amount</TableCell>
-                                <TableCell align="right">Number Available</TableCell>
-                                <TableCell align="right">Description</TableCell>
-                                <TableCell align="right">Remove</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-
-                            {status === 'loading' ? <CircularProgress /> : data.map((offer, i) => (
-                                <TableRow
-                                    key={i} >
-                                    <TableCell align="right">{offer.offerName}</TableCell>
-                                    <TableCell align="right">{(format((offer.start?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
-                                    <TableCell align="right">{(format((offer.end?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
-                                    <TableCell align="right">{offer.discount}</TableCell>
-                                    <TableCell align="right">{offer.availability}</TableCell>
-                                    <TableCell align="right">{offer.description}</TableCell>
-                                    <TableCell align="right"><IconButton aria-label="delete" onClick={() => { deleteOffer(offer.id) }}><DeleteIcon /></IconButton></TableCell>
+        <><Button onClick={() => authInstance.signOut()} variant="contained" sx={{ backgroundColor: "red", position: "absolute", top: 20, right: 20 }}>Log Out</Button>
+            {status === "loading" &&
+                <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", width: "100vw" }}>
+                    <CircularProgress />
+                </Box>}
+            {status !== "loading" &&
+                <><Typography variant="h1" sx={{ textAlign: 'center' }}>Company Name </Typography>
+                    <TableContainer component={Paper}>
+                        <Table sx={{
+                            width: '80vw',
+                            marginLeft: 'auto',
+                            marginRight: 'auto'
+                        }}
+                            aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="right">Offer Name</TableCell>
+                                    <TableCell align="right">Start Time</TableCell>
+                                    <TableCell align="right">End TIme</TableCell>
+                                    <TableCell align="right">Discount Amount</TableCell>
+                                    {/* <TableCell align="right">Number Available</TableCell> */}
+                                    <TableCell align="right">Description</TableCell>
+                                    <TableCell align="right">Remove</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>}
+                            </TableHead>
+                            <TableBody>
 
-        </>
-
+                                {status === 'loading' ? <CircularProgress /> : data.map((offer, i) => (
+                                    <TableRow
+                                        key={i} >
+                                        <TableCell align="right">{offer.offerName}</TableCell>
+                                        <TableCell align="right">{(format((offer.start?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
+                                        <TableCell align="right">{(format((offer.end?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
+                                        <TableCell align="right">{offer.discount}</TableCell>
+                                        {/* <TableCell align="right">{offer.availability}</TableCell> */}
+                                        <TableCell align="right">{offer.description}</TableCell>
+                                        <TableCell align="right"><IconButton aria-label="delete" onClick={() => { deleteOffer(offer.id) }}><DeleteIcon /></IconButton></TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer></>
+            }</>
     );
 }

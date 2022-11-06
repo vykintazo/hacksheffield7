@@ -6,6 +6,8 @@ import { addDays, startOfDay } from 'date-fns';
 import { object, string, number, date } from 'yup';
 import validate from '../utils/validate.js';
 import FormField from '../components/FormField.jsx';
+import { collection, addDoc } from "firebase/firestore";
+import { useSigninCheck, useFirestore, useFirestoreDocData, useFirebaseApp } from "reactfire";
 
 const commonStyles = {
   width: "100%"
@@ -18,7 +20,7 @@ const initialValue = {
   start: new Date(),
   end: startOfDay(addDays(new Date(), 1)),
   discount: 10,
-  availability: 10,
+  //availability: 10,
   description: ""
 }
 
@@ -35,7 +37,7 @@ const types = [
 
 
 
-export default function OfferForm({open, onClose}) {
+export default function OfferForm({ open, onClose }) {
 
 
   const [value, setValue] = useState(initialValue);
@@ -51,7 +53,7 @@ export default function OfferForm({open, onClose}) {
     start: date(),
     end: date(),
     discount: number().required(),
-    availability: number().required(),
+    //availability: number().required(),
     description: string().required()
 
   });
@@ -65,11 +67,11 @@ export default function OfferForm({open, onClose}) {
     description: string().required()
   });
 
-const handleClose = () => {
-  setValue(initialValue)
-  setErrors({})
-  onClose()
-}
+  const handleClose = () => {
+    setValue(initialValue)
+    setErrors({})
+    onClose()
+  }
 
 
   const handleAdd = async () => {
@@ -80,8 +82,21 @@ const handleClose = () => {
     console.log(errs);
     setErrors(errs)
     if (Object.keys(errs).length === 0) {
-      handleClose()
+      handleUpload();
     }
+  }
+
+  const db = useFirestore();
+  const { data: signInCheckResult } = useSigninCheck();
+
+  const handleUpload = async () => {
+    const dbRef = collection(db, "offers");
+    await addDoc(dbRef, {
+      ...value,
+      uid: signInCheckResult?.user?.uid
+    });
+
+    handleClose();
   }
 
   return (
@@ -90,7 +105,7 @@ const handleClose = () => {
         <DialogTitle>Add Offer</DialogTitle>
         <DialogContent>
           <Grid container sx={{ my: 1 }} spacing={2}>
-          <Grid item xs={12}>
+            <Grid item xs={12}>
               <FormField
                 sx={commonStyles}
                 error={errors}
@@ -165,31 +180,31 @@ const handleClose = () => {
             </Grid>
 
             {value.type === "discount" && (<>
-            <Grid item xs={12}>
-            <Typography id="input-slider" gutterBottom>
-                Discount
-              </Typography>
-              <FormField
-                valueLabelFormat={(val) => `${val} %`}
-                component={Slider}
-                defaultValue={30}
-                min={5}
-                max={90}
-                sx={{...commonStyles, mt: 4}}
-                label="discount"
-                fullWidth
-                variant="standard"
-                value={value}
-                onChange={setValue}
-                InputProps={{
-                  endAdornment: <InputAdornment position="start">%</InputAdornment>,
-                }}
-                helperText="Incorrect entry."
-                valueLabelDisplay="on"
-              />
-            </Grid>
+              <Grid item xs={12}>
+                <Typography id="input-slider" gutterBottom>
+                  Discount
+                </Typography>
+                <FormField
+                  valueLabelFormat={(val) => `${val} %`}
+                  component={Slider}
+                  defaultValue={30}
+                  min={5}
+                  max={90}
+                  sx={{ ...commonStyles, mt: 4 }}
+                  label="discount"
+                  fullWidth
+                  variant="standard"
+                  value={value}
+                  onChange={setValue}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="start">%</InputAdornment>,
+                  }}
+                  helperText="Incorrect entry."
+                  valueLabelDisplay="on"
+                />
+              </Grid>
 
-            <Grid item xs={12}>
+              {/* <Grid item xs={12}>
               <FormField
                 sx={commonStyles}
                 error={errors}
@@ -199,7 +214,7 @@ const handleClose = () => {
                 value={value}
                 onChange={setValue}
               />
-            </Grid>
+            </Grid> */}
             </>)}
 
             <Grid item xs={12}>
