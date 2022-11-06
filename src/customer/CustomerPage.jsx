@@ -32,8 +32,9 @@ export default function CustomerPage() {
 
     useEffect(() => {
         const getBusinessUser = async (businessId) => {
-            if (businesses.some((b) => b.uid === businessId)) {
-                return null;
+            const existing = businesses.find((b) => b.uid === businessId)
+            if (existing) {
+                return {...existing};
             }
             const businessSnap = await getDoc(doc(firestore, "users", businessId));
             if (businessSnap.exists()) {
@@ -42,7 +43,8 @@ export default function CustomerPage() {
             return null;
         };
         const groupOffers = async (offers) => {
-            const businessIds = [...new Set(offers?.map((offer) => offer.uid))]
+            const businessIds = [...new Set(offers?.map((offer) => offer.uid))];
+            console.log('Ids', businessIds);
             const business = await Promise.all(businessIds.map(getBusinessUser));
             setBusinesses(business.filter(Boolean));
         };
