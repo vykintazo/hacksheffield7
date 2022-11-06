@@ -24,7 +24,7 @@ export default function VenueMarker({
                     <circle
                         cx={size / 2}
                         cy={size / 2}
-                        r={size / 2}
+                        r={(size / 2) - 1}
                         stroke="white"
                         strokeWidth={2}
                         fill={color ?? "#b81200"}
