@@ -108,6 +108,8 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
                             </Box>
                             <List>
                                 {offers?.filter((offer) => offer.uid === selectedBusiness.uid)?.map((offer) => {
+
+                                    // TODO add more details for offer item
                                     return (
                                         <ListItemButton key={offer.id} onClick={() => null}>
                                             <ListItemText
