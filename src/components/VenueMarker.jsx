@@ -1,6 +1,16 @@
 import {Marker} from "react-map-gl";
 
-export default function VenueMarker({lat, lon, onClick, offerCount = 0, label, size = 40, ...rest}) {
+export default function VenueMarker({
+                                        lat,
+                                        lon,
+                                        onClick,
+                                        offerCount = 0,
+                                        label,
+                                        simple,
+                                        color,
+                                        size = 40,
+                                        ...rest
+                                    }) {
 
     return (
         <Marker
@@ -17,19 +27,19 @@ export default function VenueMarker({lat, lon, onClick, offerCount = 0, label, s
                         r={size / 2}
                         stroke="white"
                         strokeWidth={2}
-                        fill="#b81200"
+                        fill={color ?? "#b81200"}
                     />
-                    <text
-                        style={{ fill: 'white', font: 'bold 1.25em'}}
+                    {!simple && (<text
+                        style={{fill: 'white', font: 'bold 1.25em'}}
                         x={size / 2}
                         y={size / 2}
                         textAnchor="middle"
                         alignmentBaseline="middle"
                     >
-                        {offerCount}
-                    </text>
+                        {offerCount ?? 0}
+                    </text>)}
                 </svg>
-                <div style={{fontSize: '1.25em', fontWeight: 'bold'}}>{label}</div>
+                {(label && !simple) && <div style={{fontSize: '1.25em', fontWeight: 'bold'}}>{label}</div>}
             </div>
         </Marker>
     )
