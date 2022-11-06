@@ -5,7 +5,7 @@ import {grey} from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import {Button, IconButton, List, ListItemButton, ListItemText} from "@mui/material";
+import {Button, IconButton, List, ListItemButton, ListItemText, Stack} from "@mui/material";
 import {ArrowBack} from "@mui/icons-material";
 
 const drawerBleeding = 56;
@@ -103,9 +103,11 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
                         })}
                     </List>) : (
                         <Box sx={{width: '100%'}}>
-                            <Box sx={{width: '100%'}}>
+                            <Stack direction="row" alignItems="center" sx={{width: '100%'}}>
                                 <IconButton onClick={() => onSelectedBusinessChange(null)}><ArrowBack/></IconButton>
-                            </Box>
+                                <Typography sx={{flexGrow: 1}}
+                                            variant="h6">{selectedBusiness.business.name}</Typography>
+                            </Stack>
                             <List>
                                 {offers?.filter((offer) => offer.uid === selectedBusiness.uid)?.map((offer) => {
 
