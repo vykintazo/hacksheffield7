@@ -8,36 +8,27 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {collection, doc, getDoc, query, where} from "firebase/firestore";
 
-
+const now = new Date();
 export default function CustomerPage() {
-    const markers = [
-        {location: [53.38089284303829, -1.4766664972820758], label: "Molly Malone's Irish Tavern"},
-        {location: [53.379374277675964, -1.4702493564818155], label: "Costa Coffee"},
-        {location: [53.38020004206791, -1.4792187983038223], label: "KFC Sheffield"},
-        {location: [53.380888801054645, -1.479620700831369], label: "The Red Deer"},
-    ]
+    const [selectedBusiness, setSelectedBusiness] = useState(null);
     const [businesses, setBusinesses] = useState([]);
 
     const firestore = useFirestore();
     const offerCollection = collection(firestore, 'offers');
-    const offerQuery = query(offerCollection, where('end', '<=', new Date()))
+    const offerQuery = query(offerCollection, where('end', '>', now));
 
-    const {status, data: offers} = useFirestoreCollectionData(offerCollection, {
+    const {data: offers} = useFirestoreCollectionData(offerQuery, {
         idField: 'id', // this field will be added to the object created from each document
     });
-
 
     const {data: signInCheckResult} = useSigninCheck();
 
     const authInstance = getAuth(useFirebaseApp());
 
-    const db = useFirestore();
-
-    const docRef = doc(db, 'users', signInCheckResult?.user?.uid);
+    const docRef = doc(firestore, 'users', signInCheckResult?.user?.uid);
     const response = useFirestoreDocData(docRef);
 
     const navigateTo = useNavigate();
-
 
     useEffect(() => {
         const getBusinessUser = async (businessId) => {
@@ -46,24 +37,18 @@ export default function CustomerPage() {
             }
             const businessSnap = await getDoc(doc(firestore, "users", businessId));
             if (businessSnap.exists()) {
-                const businessUser = businessSnap.data();
-                console.log(businessUser);
-                return businessUser;
+                return businessSnap.data();
             }
             return null;
         };
         const groupOffers = async (offers) => {
-            await Promise.allSettled(offers.map(async (offer) => {
-                const businessId = offer.uid;
-                const businessUser = await getBusinessUser(businessId);
-                if (businessUser) {
-                    setBusinesses((prev) => [...prev, businessUser])
-                }
-            }));
+            const businessIds = [...new Set(offers?.map((offer) => offer.uid))]
+            const business = await Promise.all(businessIds.map(getBusinessUser));
+            setBusinesses(business.filter(Boolean));
         };
 
         groupOffers(offers);
-    }, [offers, firestore])
+    }, [offers, firestore]);
 
 
     useEffect(() => {
@@ -85,7 +70,12 @@ export default function CustomerPage() {
             >
                 <Button onClick={() => authInstance.signOut()} variant="contained"
                         sx={{backgroundColor: "red", position: "absolute", top: 20, right: 20}}>Log Out</Button>
-                <MenuBar/>
+                <MenuBar
+                    businesses={businesses}
+                    offers={offers}
+                    selectedBusiness={selectedBusiness}
+                    onSelectedBusinessChange={setSelectedBusiness}
+                />
                 <GeolocateControl
                     trackUserLocation={true}
                     position="bottom-right"
@@ -93,16 +83,17 @@ export default function CustomerPage() {
                         marginBottom: 40
                     }}
                 />
-                {businesses.map((businessUser, i) => {
+                {businesses?.map((businessUser, i) => {
                     const {business, uid} = businessUser
-
+                    const businessOffers = offers?.filter((offer) => offer.uid === uid);
                     return (
                         <VenueMarker
                             key={uid}
                             lon={business.location.lon}
                             lat={business.location.lat}
                             label={business.name}
-                            offerCount={5}
+                            offerCount={businessOffers.length}
+                            onClick={() => setSelectedBusiness(businessUser)}
                         />
                     );
                 })}
