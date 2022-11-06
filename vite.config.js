@@ -23,9 +23,9 @@ export default defineConfig({
           "type": "image/png"
         },
         {
-          "src": "/safari-pinned-tab.svg",
+          "src": "/android-chrome-512x512.png",
           "sizes": "512x512",
-          "type": "image/svg+xml",
+          "type": "image/png",
           "purpose": "maskable"
         },
       ],
