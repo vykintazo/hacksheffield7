@@ -96,7 +96,14 @@ export default function CustomerPage() {
                             lat={business.location.lat}
                             label={business.name}
                             offerCount={businessOffers.length}
-                            onClick={() => setSelectedBusiness(businessUser)}
+                            onClick={() => {
+                                setSelectedBusiness(businessUser);
+                                mapInstance.current?.flyTo({ 
+                                    center: [business?.location?.lon, 
+                                    business?.location?.lat],
+                                    zoom: 17 
+                                });
+                            }}
                         />
                     );
                 })}

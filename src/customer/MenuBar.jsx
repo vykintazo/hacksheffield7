@@ -137,7 +137,11 @@ export default function MenuBar({ businesses, offers, selectedBusiness, onSelect
                             return (
                                 <ListItemButton key={uid} onClick={() => {
                                     onSelectedBusinessChange(businessUser);
-                                    mapInstance.current.flyTo({ center: [business?.location?.lon, business?.location?.lat] });
+                                    mapInstance.current.flyTo({ 
+                                        center: [business?.location?.lon, 
+                                        business?.location?.lat],
+                                        zoom: 17 
+                                    });
                                 }}>
                                     <ListItemText
                                         primary={business.name}
