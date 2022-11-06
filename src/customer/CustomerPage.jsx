@@ -5,7 +5,7 @@ import {getAuth} from "firebase/auth";
 import {useFirebaseApp, useFirestore, useFirestoreCollectionData, useFirestoreDocData, useSigninCheck} from "reactfire";
 import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import {collection, doc, getDoc, query, where} from "firebase/firestore";
 
 const now = new Date();
@@ -50,6 +50,7 @@ export default function CustomerPage() {
         groupOffers(offers);
     }, [offers, firestore]);
 
+    const mapInstance = useRef();
 
     useEffect(() => {
         signInCheckResult?.signedIn === false && navigateTo("/auth");
@@ -64,6 +65,7 @@ export default function CustomerPage() {
                     latitude: 53.378,
                     zoom: 13.21
                 }}
+                ref={mapInstance}
                 style={{width: '100vw', height: '100vh'}}
                 mapStyle="mapbox://styles/illuminatiboat/cla42292y00ns14p07a4ipgzp"
                 mapboxAccessToken=import.meta.env.APP_MAPBOX_TOKEN
@@ -71,6 +73,7 @@ export default function CustomerPage() {
                 <Button onClick={() => authInstance.signOut()} variant="contained"
                         sx={{backgroundColor: "red", position: "absolute", top: 20, right: 20}}>Log Out</Button>
                 <MenuBar
+                    mapInstance={mapInstance}
                     businesses={businesses}
                     offers={offers}
                     selectedBusiness={selectedBusiness}
