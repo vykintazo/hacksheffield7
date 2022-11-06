@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import { format } from "date-fns";
 
 
-export default function Countdown( {targetDate} ) {
+export default function Countdown( {targetDate, setCountDownChange} ) {
 
     const [countDown, setCountDown] = useState(
         targetDate - new Date()
@@ -13,6 +13,11 @@ export default function Countdown( {targetDate} ) {
             setCountDown(targetDate - new Date());
         }, 1000);
         return () => clearInterval(interval);
+    }, [countDown]);
+
+    useEffect(() => {
+        setCountDownChange?.(countDown);
+        // console.log(countDown);
     }, [countDown]);
 
 
@@ -32,7 +37,7 @@ export default function Countdown( {targetDate} ) {
         return Math.floor((countDown % (1000 * 60)) / 1000);
     };
 
-    return (
-        <> {`${getDays(countDown)}d ${getHours(countDown)}h ${getMinutes(countDown)}m ${getSeconds(countDown)}s `}</>
+    return countDown < 0 ? <span style={{color: 'red'}}>EXPIRED</span> : (
+        `${getDays(countDown)}d ${getHours(countDown)}h ${getMinutes(countDown)}m ${getSeconds(countDown)}s `
     );
 }

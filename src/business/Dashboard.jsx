@@ -13,16 +13,10 @@ import { format } from "date-fns";
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getAuth } from "firebase/auth";
-
 import { useEffect, useState } from 'react';
 import Countdown from './Countdown';
 
 export default function BasicTable() {
-    // [DEBUG] log the data
-    //   useEffect(() => {
-    //     console.log(data);
-    //   }), [data];
-
     const firestore = useFirestore();
     const offerCollection = collection(firestore, 'offers');
     const offersQuery = query(offerCollection);
@@ -46,9 +40,16 @@ export default function BasicTable() {
 
     const [companyName, setCompanyName] = useState(<CircularProgress />);
 
+    const [countdownChange, setCountDownChange] = useState({});
+
     useEffect(() => {
         response?.data && setCompanyName(response?.data?.business?.name);
     }, [response?.data]);
+
+    useEffect(() => {
+        console.log(countdownChange);
+        countdownChange < 0 && console.log("negative");
+    }, [countdownChange])
 
     return (
         <><Button onClick={() => authInstance.signOut()} variant="contained" sx={{ backgroundColor: "red", position: "absolute", top: 20, right: 20 }}>Log Out</Button>
@@ -69,7 +70,7 @@ export default function BasicTable() {
                                 <TableRow>
                                     <TableCell align="right">Offer Name</TableCell>
                                     <TableCell align="right">Start Time</TableCell>
-                                    <TableCell align="right">End TIme</TableCell>
+                                    <TableCell align="right">End Time</TableCell>
                                     <TableCell align="right">Discount Amount</TableCell>
                                     <TableCell align="right">Description</TableCell>
                                     <TableCell align="right">Time remaining</TableCell>
@@ -80,13 +81,15 @@ export default function BasicTable() {
 
                                 {status === 'loading' ? <CircularProgress /> : data.map((offer) => (
                                     <TableRow
-                                        key={offer.id} >
+                                        key={offer.id}
+                                        // sx={{backgroundColor: countdownChange[offer.id] <= 0 ? "grey": "default"}}>
+                                        sx={{backgroundColor: "grey"}}>
                                         <TableCell align="right">{offer.offerName}</TableCell>
                                         <TableCell align="right">{(format((offer.start?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
                                         <TableCell align="right">{(format((offer.end?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
                                         <TableCell align="right">{offer.discount}</TableCell>
                                         <TableCell align="right">{offer.description}</TableCell>
-                                        <TableCell align="right">{<Countdown targetDate={offer.end?.toDate()}/>}</TableCell>
+                                        <TableCell align="right">{<Countdown targetDate={offer.end?.toDate()} setCountdownChange={(change) => setCountDownChange((prev) => ({ ...prev, [offer.id]: change }))} />}</TableCell>
                                         <TableCell align="right"><IconButton aria-label="delete" onClick={() => { deleteOffer(offer.id) }}><DeleteIcon /></IconButton></TableCell>
                                     </TableRow>
                                 ))}
