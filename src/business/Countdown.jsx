@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import { format } from "date-fns";
 
 
-export default function Countdown( {targetDate, setCountDownChange} ) {
+export default function Countdown( {targetDate, onCountdownChange} ) {
 
     const [countDown, setCountDown] = useState(
         targetDate - new Date()
@@ -16,8 +16,7 @@ export default function Countdown( {targetDate, setCountDownChange} ) {
     }, [countDown]);
 
     useEffect(() => {
-        setCountDownChange?.(countDown);
-        // console.log(countDown);
+        onCountdownChange?.(countDown);
     }, [countDown]);
 
 
