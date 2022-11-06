@@ -8,7 +8,7 @@ export const categoryConfig = {
     "Café": {
         color: "#ba450f"
     },
-    "Fruit & Veg": {
+    "Greengrocer": {
         color: "#35870f"
     }
 };
