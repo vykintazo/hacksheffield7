@@ -11,7 +11,7 @@ import distance from "@turf/distance";
 import {capitalize} from "../components/FormField.jsx";
 import Countdown from "../business/Countdown.jsx"
 
-const drawerBleeding = 56;
+const drawerBleeding = 86;
 
 const StyledBox = styled(Box)(({theme}) => ({
     backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
@@ -89,7 +89,7 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
                 onClick={toggleDrawer(true)}
                 sx={{
                     display: {xs: "none", md: open ? "none" : "flex"}, justifyContent: "center", position: "absolute",
-                    bottom: "20px", zIndex: "100000", width: "100vw"
+                    bottom: "51px", zIndex: "100000", width: "100vw"
                 }}>
                 <Button onClick={toggleDrawer(true)}>Open</Button>
             </Box>
@@ -117,7 +117,7 @@ export default function MenuBar({businesses, offers, selectedBusiness, onSelecte
                     }}
                 >
                     <Puller sx={{display: {md: "none"}}}/>
-                    <Typography variant="h5" sx={{p: 2}}>Nearby Offers</Typography>
+                    <Typography variant="h5" sx={{px: 2, py: 4}}>Nearby Offers</Typography>
                 </StyledBox>
                 <StyledBox
                     sx={{
