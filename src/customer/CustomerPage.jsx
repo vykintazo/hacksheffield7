@@ -88,7 +88,7 @@ export default function CustomerPage() {
                     trackUserLocation={true}
                     position="bottom-right"
                     style={{
-                        marginBottom: 80
+                        marginBottom: 100
                     }}
                 />
                 {businesses?.map((businessUser, i) => {
