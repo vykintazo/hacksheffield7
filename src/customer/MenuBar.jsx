@@ -5,8 +5,9 @@ import { grey } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import { Button, IconButton, List, ListItemButton, ListItemText, Stack } from "@mui/material";
+import { Button, Divider, IconButton, List, ListItemButton, ListItemText, Stack } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
+import Countdown from '../business/Countdown.jsx';
 
 const drawerBleeding = 56;
 
@@ -43,6 +44,8 @@ export default function MenuBar({ businesses, offers, selectedBusiness, onSelect
         }
     }, [open]);
 
+    const [countdownChange, setCountDownChange] = useState({});
+
     return (
         <div>
             <Global
@@ -54,11 +57,11 @@ export default function MenuBar({ businesses, offers, selectedBusiness, onSelect
                 }}
             />
             <Box
-            onClick={toggleDrawer(true)}
-            sx={{
-                display: { xs: "none", md: open ? "none" : "flex" }, justifyContent: "center", position: "absolute",
-                bottom: "20px", zIndex: "100000", width: "100vw"
-            }}>
+                onClick={toggleDrawer(true)}
+                sx={{
+                    display: { xs: "none", md: open ? "none" : "flex" }, justifyContent: "center", position: "absolute",
+                    bottom: "20px", zIndex: "100000", width: "100vw"
+                }}>
                 <Button onClick={toggleDrawer(true)}>Open</Button>
             </Box>
             <SwipeableDrawer
@@ -121,8 +124,18 @@ export default function MenuBar({ businesses, offers, selectedBusiness, onSelect
                                     return (
                                         <ListItemButton key={offer.id} onClick={() => null}>
                                             <ListItemText
-                                                primary={offer.offerName}
-                                                secondary={offer.description} />
+                                                sx={{ backgroundColor: countdownChange[offer.id] <= 0 ? "lightgray" : "inherit" }}
+                                                disableTypography
+                                                primary={<><Typography variant="p" sx={{ color: "#b31f02" }}>Time left: <Countdown
+                                                    targetDate={offer.end?.toDate()}
+                                                    onCountdownChange={(change) => {
+                                                        setCountDownChange((prev) => ({
+                                                            ...prev,
+                                                            [offer.id]: change
+                                                        }))
+                                                    }} /></Typography><Divider />
+                                                    <Typography variant="body1">{offer.offerName}</Typography></>}
+                                                secondary={<Typography variant="body2">{offer.description}</Typography>} />
                                         </ListItemButton>
                                     )
                                 })}
