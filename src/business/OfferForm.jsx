@@ -34,28 +34,6 @@ const types = [
 ]
 
 
-let userSchema = object({
-  type: string().required(),
-  offerName: string().required(),
-  category: string().required(),
-  startDate: date(),
-  endDate: date(),
-  discount: number().required(),
-  availability: number().required(),
-  description: string().required()
-
-});
-
-let userSchemaDescription = object({
-  type: string().required(),
-  offerName: string().required(),
-  category: string().required(),
-  startDate: date(),
-  endDate: date(),
-  description: string().required()
-});
-
-
 
 export default function OfferForm({open, onClose}) {
 
@@ -65,6 +43,27 @@ export default function OfferForm({open, onClose}) {
   const [errors, setErrors] = useState(
     {}
   );
+
+  let userSchema = object({
+    type: string().required(),
+    offerName: string().required(),
+    category: string().required(),
+    start: date(),
+    end: date(),
+    discount: number().required(),
+    availability: number().required(),
+    description: string().required()
+
+  });
+
+  let userSchemaDescription = object({
+    type: string().required(),
+    offerName: string().required(),
+    category: string().required(),
+    start: date(),
+    end: date(),
+    description: string().required()
+  });
 
 const handleClose = () => {
   setValue(initialValue)
@@ -161,6 +160,7 @@ const handleClose = () => {
                 onChange={setValue}
                 isEvent={false}
                 inputFormat="yyyy-MM-dd HH:mm"
+                minDateTime={value.start}
               />
             </Grid>
 
