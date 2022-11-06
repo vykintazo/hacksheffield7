@@ -76,18 +76,12 @@ const handleClose = () => {
   const handleAdd = async () => {
     console.log(value)
     setErrors({})
-    const errs = await validate(userSchema, value);
-    
+    const errs = await validate(value.type === "description" ? userSchemaDescription : userSchema, value);
+
     console.log(errs);
     setErrors(errs)
     if (Object.keys(errs).length === 0) {
       handleClose()
-    } else if (value.type === "description") {
-      const errsDescription = await validate(userSchemaDescription, value);
-      setErrors(errsDescription)
-      if (Object.keys(errsDescription).length === 0) {
-        handleClose()
-      }
     }
   }
 
@@ -125,7 +119,7 @@ const handleClose = () => {
               </FormField>
 
             </Grid>
-            
+
             <Grid item xs={12}>
 
               <FormField
@@ -175,7 +169,7 @@ const handleClose = () => {
             <Typography id="input-slider" gutterBottom>
                 Discount
               </Typography>
-              <FormField 
+              <FormField
                 valueLabelFormat={(val) => `${val} %`}
                 component={Slider}
                 defaultValue={30}
@@ -206,7 +200,7 @@ const handleClose = () => {
                 onChange={setValue}
               />
             </Grid>
-            </>)}     
+            </>)}
 
             <Grid item xs={12}>
               <FormField
