@@ -7,11 +7,14 @@ import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState, useRef} from "react";
 import {collection, doc, getDoc, query, where} from "firebase/firestore";
+import {categoryConfig} from "../categoryConfig.js";
+import {capitalize} from "../components/FormField.jsx";
 
 const now = new Date();
 export default function CustomerPage() {
     const [selectedBusiness, setSelectedBusiness] = useState(null);
     const [businesses, setBusinesses] = useState([]);
+    const [viewState, setViewState] = useState({});
 
     const firestore = useFirestore();
     const offerCollection = collection(firestore, 'offers');
@@ -32,8 +35,9 @@ export default function CustomerPage() {
 
     useEffect(() => {
         const getBusinessUser = async (businessId) => {
-            if (businesses.some((b) => b.uid === businessId)) {
-                return null;
+            const existing = businesses.find((b) => b.uid === businessId)
+            if (existing) {
+                return {...existing};
             }
             const businessSnap = await getDoc(doc(firestore, "users", businessId));
             if (businessSnap.exists()) {
@@ -42,7 +46,7 @@ export default function CustomerPage() {
             return null;
         };
         const groupOffers = async (offers) => {
-            const businessIds = [...new Set(offers?.map((offer) => offer.uid))]
+            const businessIds = [...new Set(offers?.map((offer) => offer.uid))];
             const business = await Promise.all(businessIds.map(getBusinessUser));
             setBusinesses(business.filter(Boolean));
         };
@@ -65,6 +69,7 @@ export default function CustomerPage() {
                     latitude: 53.378,
                     zoom: 13.21
                 }}
+                onZoom={(ev) => setViewState(ev.viewState)}
                 ref={mapInstance}
                 style={{width: '100vw', height: '100vh'}}
                 mapStyle="mapbox://styles/illuminatiboat/cla42292y00ns14p07a4ipgzp"
@@ -95,8 +100,18 @@ export default function CustomerPage() {
                             lon={business.location.lon}
                             lat={business.location.lat}
                             label={business.name}
+                            simple={viewState.zoom && viewState.zoom < 13}
+                            size={viewState.zoom && viewState.zoom < 13 ? 16 : 40}
                             offerCount={businessOffers.length}
-                            onClick={() => setSelectedBusiness(businessUser)}
+                            color={categoryConfig[capitalize(business.type)]?.color}
+                            onClick={() => {
+                                setSelectedBusiness(businessUser);
+                                mapInstance.current?.flyTo({
+                                    center: [business?.location?.lon,
+                                    business?.location?.lat],
+                                    zoom: 17
+                                });
+                            }}
                         />
                     );
                 })}
