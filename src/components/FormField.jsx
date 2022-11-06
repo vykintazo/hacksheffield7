@@ -1,12 +1,12 @@
 import {FormControl, FormHelperText, FormLabel, TextField} from "@mui/material";
 
-const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1)
+export const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1)
 
 export default function FormField(
     {value, error, label, formControl, onChange, isEvent = true, component: Component=TextField, customLabel, ...rest}
 ) {
 
-    const handleChange = (value) => { 
+    const handleChange = (value) => {
         onChange((prev) => ({ ...prev, [label]: isEvent ? value.target.value : value }))
       }
 

@@ -7,6 +7,8 @@ import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState, useRef} from "react";
 import {collection, doc, getDoc, query, where} from "firebase/firestore";
+import {categoryConfig} from "../categoryConfig.js";
+import {capitalize} from "../components/FormField.jsx";
 
 const now = new Date();
 export default function CustomerPage() {
@@ -101,6 +103,7 @@ export default function CustomerPage() {
                             simple={viewState.zoom && viewState.zoom < 13}
                             size={viewState.zoom && viewState.zoom < 13 ? 16 : 40}
                             offerCount={businessOffers.length}
+                            color={categoryConfig[capitalize(business.type)]?.color}
                             onClick={() => {
                                 setSelectedBusiness(businessUser);
                                 mapInstance.current?.flyTo({

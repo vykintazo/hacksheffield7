@@ -7,6 +7,7 @@ export default function VenueMarker({
                                         offerCount = 0,
                                         label,
                                         simple,
+                                        color,
                                         size = 40,
                                         ...rest
                                     }) {
@@ -26,7 +27,7 @@ export default function VenueMarker({
                         r={size / 2}
                         stroke="white"
                         strokeWidth={2}
-                        fill="#b81200"
+                        fill={color ?? "#b81200"}
                     />
                     {!simple && (<text
                         style={{fill: 'white', font: 'bold 1.25em'}}

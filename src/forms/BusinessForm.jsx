@@ -7,6 +7,7 @@ import { useSigninCheck, useFirestore, useFirestoreDocData } from "reactfire";
 import { useNavigate } from "react-router-dom";
 import { doc, updateDoc } from "firebase/firestore";
 import geocode from "../utils/geocode.js";
+import {categoryConfig} from "../categoryConfig.js";
 
 const initialValue = {
     businessName: "",
@@ -17,11 +18,7 @@ const initialValue = {
     postcode: ""
 }
 
-const types = [
-    "Pub",
-    "Fashion",
-    "Café",
-]
+const types = Object.keys(categoryConfig);
 
 let userSchema = object({
     businessName: string().required(),
