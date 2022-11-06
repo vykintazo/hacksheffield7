@@ -13,7 +13,9 @@ import { format } from "date-fns";
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getAuth } from "firebase/auth";
+
 import { useEffect, useState } from 'react';
+import Countdown from './Countdown';
 
 export default function BasicTable() {
     // [DEBUG] log the data
@@ -69,22 +71,22 @@ export default function BasicTable() {
                                     <TableCell align="right">Start Time</TableCell>
                                     <TableCell align="right">End TIme</TableCell>
                                     <TableCell align="right">Discount Amount</TableCell>
-                                    {/* <TableCell align="right">Number Available</TableCell> */}
                                     <TableCell align="right">Description</TableCell>
+                                    <TableCell align="right">Time remaining</TableCell>
                                     <TableCell align="right">Remove</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
 
-                                {status === 'loading' ? <CircularProgress /> : data.map((offer, i) => (
+                                {status === 'loading' ? <CircularProgress /> : data.map((offer) => (
                                     <TableRow
-                                        key={i} >
+                                        key={offer.id} >
                                         <TableCell align="right">{offer.offerName}</TableCell>
                                         <TableCell align="right">{(format((offer.start?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
                                         <TableCell align="right">{(format((offer.end?.toDate()), "yyyy-MM-dd HH:mm"))}</TableCell>
                                         <TableCell align="right">{offer.discount}</TableCell>
-                                        {/* <TableCell align="right">{offer.availability}</TableCell> */}
                                         <TableCell align="right">{offer.description}</TableCell>
+                                        <TableCell align="right">{<Countdown targetDate={offer.end?.toDate()}/>}</TableCell>
                                         <TableCell align="right"><IconButton aria-label="delete" onClick={() => { deleteOffer(offer.id) }}><DeleteIcon /></IconButton></TableCell>
                                     </TableRow>
                                 ))}
