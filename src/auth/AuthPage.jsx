@@ -34,11 +34,11 @@ export default function AuthPage() {
             //     // console.log(authResult);
             //     return false;
             // },
-            uiShown: function () {
-                // The widget is rendered.
-                // Hide the loader.
-                setLoaded(true);
-            }
+            // uiShown: function () {
+            //     // The widget is rendered.
+            //     // Hide the loader.
+            //     setLoaded(true);
+            // }
         },
         // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
         signInFlow: 'popup',
