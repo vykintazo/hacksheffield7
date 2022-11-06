@@ -7,7 +7,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import {useFirebaseApp, useFirestore, useFirestoreCollectionData, useFirestoreDocData, useSigninCheck} from 'reactfire';
-import {collection, deleteDoc, doc, query} from "firebase/firestore";
+import {collection, deleteDoc, doc, query, where} from "firebase/firestore";
 import {Box, Button, CircularProgress, IconButton} from '@mui/material';
 import {format} from "date-fns";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,29 +16,27 @@ import {useEffect, useState} from 'react';
 import Countdown from './Countdown';
 
 export default function BasicTable() {
-    const firestore = useFirestore();
-    const offerCollection = collection(firestore, 'offers');
-    const offersQuery = query(offerCollection);
+    const db = useFirestore();
+    const authInstance = getAuth(useFirebaseApp());
+    const {data: signInCheckResult} = useSigninCheck();
+    const docRef = doc(db, 'users', signInCheckResult?.user?.uid);
+    
+    const response = useFirestoreDocData(docRef);
+
+    const offerCollection = collection(db, 'offers');
+    const offersQuery = query(offerCollection, where("uid", "==", response?.data?.uid));
 
     const {status, data} = useFirestoreCollectionData(offersQuery, {
         idField: 'id', // this field will be added to the object created from each document
     });
 
-    const authInstance = getAuth(useFirebaseApp());
-
     const deleteOffer = async (id) => {
         console.log(id);
-        await deleteDoc(doc(firestore, "offers", id));
+        await deleteDoc(doc(db, "offers", id));
     }
 
-    const db = useFirestore();
-    const {data: signInCheckResult} = useSigninCheck();
-
-    const docRef = doc(db, 'users', signInCheckResult?.user?.uid);
-    const response = useFirestoreDocData(docRef);
-
+    signInCheckResult?.signedIn === false && navigateTo("/auth");
     const [companyName, setCompanyName] = useState(<CircularProgress/>);
-
     const [countdownChange, setCountDownChange] = useState({});
 
     useEffect(() => {
