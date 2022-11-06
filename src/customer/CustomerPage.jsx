@@ -1,6 +1,12 @@
-import Map, {GeolocateControl} from "react-map-gl";
+import Map, { GeolocateControl, Marker } from "react-map-gl";
 import MenuBar from "./MenuBar";
 import VenueMarker from "../components/VenueMarker";
+import { getAuth } from "firebase/auth";
+import { useFirebaseApp, useSigninCheck, useFirestore, useFirestoreDocData } from "reactfire";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { doc } from "firebase/firestore";
 import {getAuth} from "firebase/auth";
 import {useFirebaseApp, useFirestore, useFirestoreCollectionData, useSigninCheck} from "reactfire";
 import {Button} from "@mui/material";
@@ -30,6 +36,11 @@ export default function CustomerPage() {
     const {data: signInCheckResult} = useSigninCheck();
 
     const authInstance = getAuth(useFirebaseApp());
+
+    const db = useFirestore();
+
+    const docRef = doc(db, 'users', signInCheckResult?.user?.uid);
+    const response = useFirestoreDocData(docRef);
 
     const navigateTo = useNavigate();
 
@@ -63,7 +74,8 @@ export default function CustomerPage() {
 
     useEffect(() => {
         signInCheckResult?.signedIn === false && navigateTo("/auth");
-    }, [signInCheckResult?.signedIn]);
+        response?.data?.userRole === "business" && navigateTo("/business");
+    }, [response?.data, signInCheckResult?.signedIn]);
 
     return (
         <div>
