@@ -27,7 +27,6 @@ let userSchema = object({
     businessName: string().required(),
     type: string().required(),
     addressLine1: string().required(),
-    addressLine2: string().required(),
     city: string().required(),
     postcode: string().required()
 });
