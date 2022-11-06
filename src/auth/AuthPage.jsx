@@ -6,6 +6,7 @@ import { useFirebaseApp, useFirestore, useSigninCheck } from "reactfire";
 import { Box, CircularProgress, Typography } from "@mui/material";
 // import { doc, setDoc } from "firebase/firestore";
 import { Navigate } from 'react-router-dom';
+import logo from '../assets/logo.png'
 
 // // compat SDK needed for FirebaseUI
 // import firebase from "firebase/compat/app";
@@ -59,9 +60,12 @@ export default function AuthPage() {
         privacyPolicyUrl: 'https://www.google.com/'
     };
 
-    return (<Box sx={{ display: "flex", height: "100vh", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
-        <Box sx={{ height: "10vh" }}>
-            <Typography variant="h5" component="h1">Welcome to DiscountMapper!</Typography>
+    return (
+        <Box sx={{ display: "flex", height: "100vh", alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+        <Box sx={{ minHeight: "10vh", textAlign: "center" }}>
+            <img src={logo} alt="logo" style={{ maxWidth: '80vw', width: 100 }} />
+            <Typography variant="h4" fontWeight="bold" component="h1" gutterBottom>Welcome to DiscountMapper!</Typography>
+            <Typography sx={{ mb: 4 }}>Signup as a business or a customer today</Typography>
         </Box>
         {loaded || <CircularProgress />}
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={getAuth(useFirebaseApp())} />
