@@ -12,6 +12,7 @@ const now = new Date();
 export default function CustomerPage() {
     const [selectedBusiness, setSelectedBusiness] = useState(null);
     const [businesses, setBusinesses] = useState([]);
+    const [viewState, setViewState] = useState({});
 
     const firestore = useFirestore();
     const offerCollection = collection(firestore, 'offers');
@@ -44,7 +45,6 @@ export default function CustomerPage() {
         };
         const groupOffers = async (offers) => {
             const businessIds = [...new Set(offers?.map((offer) => offer.uid))];
-            console.log('Ids', businessIds);
             const business = await Promise.all(businessIds.map(getBusinessUser));
             setBusinesses(business.filter(Boolean));
         };
@@ -67,6 +67,7 @@ export default function CustomerPage() {
                     latitude: 53.378,
                     zoom: 13.21
                 }}
+                onZoom={(ev) => setViewState(ev.viewState)}
                 ref={mapInstance}
                 style={{width: '100vw', height: '100vh'}}
                 mapStyle="mapbox://styles/illuminatiboat/cla42292y00ns14p07a4ipgzp"
@@ -97,13 +98,15 @@ export default function CustomerPage() {
                             lon={business.location.lon}
                             lat={business.location.lat}
                             label={business.name}
+                            simple={viewState.zoom && viewState.zoom < 13}
+                            size={viewState.zoom && viewState.zoom < 13 ? 16 : 40}
                             offerCount={businessOffers.length}
                             onClick={() => {
                                 setSelectedBusiness(businessUser);
-                                mapInstance.current?.flyTo({ 
-                                    center: [business?.location?.lon, 
+                                mapInstance.current?.flyTo({
+                                    center: [business?.location?.lon,
                                     business?.location?.lat],
-                                    zoom: 17 
+                                    zoom: 17
                                 });
                             }}
                         />
