@@ -15,8 +15,6 @@ import logo from '../assets/logo.png'
 export default function AuthPage() {
     // const db = useFirestore();
 
-    const [loaded, setLoaded] = useState(false);
-
     const { status, data: signInCheckResult } = useSigninCheck();
 
     const uiConfig = {
@@ -67,7 +65,6 @@ export default function AuthPage() {
             <Typography variant="h4" fontWeight="bold" component="h1" gutterBottom>Welcome to DiscountMapper!</Typography>
             <Typography sx={{ mb: 4 }}>Signup as a business or a customer today</Typography>
         </Box>
-        {loaded || <CircularProgress />}
         <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={getAuth(useFirebaseApp())} />
         {signInCheckResult?.signedIn && <Navigate to="/" replace={true} />}
     </Box>
