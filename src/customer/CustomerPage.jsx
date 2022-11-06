@@ -3,7 +3,7 @@ import MenuBar from "./MenuBar";
 import VenueMarker from "../components/VenueMarker";
 import { getAuth } from "firebase/auth";
 import { useFirebaseApp, useFirestore, useFirestoreCollectionData, useFirestoreDocData, useSigninCheck } from "reactfire";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { collection, doc, getDoc, query, where } from "firebase/firestore";
@@ -89,7 +89,6 @@ export default function CustomerPage() {
                     position="bottom-right"
                     style={{
                         marginBottom: 100,
-                        display: "none"
                     }}
                 />
                 {businesses?.map((businessUser, i) => {
