@@ -1,12 +1,15 @@
-import { Box, Button, DialogActions, MenuItem, Stack, TextField } from "@mui/material"
+import { Box, Button, DialogActions, MenuItem, Stack, TextField, Typography } from "@mui/material"
 import FormField from "../components/FormField.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { object, string } from "yup";
 import validate from "../utils/validate.js";
-
+import { useSigninCheck, useFirestore, useFirestoreDocData } from "reactfire";
+import { useNavigate } from "react-router-dom";
+import { doc, updateDoc } from "firebase/firestore";
+import geocode from "../utils/geocode.js";
 
 const initialValue = {
-    name: "",
+    businessName: "",
     type: "",
     addressLine1: "",
     addressLine2: "",
@@ -21,7 +24,7 @@ const types = [
 ]
 
 let userSchema = object({
-    name: string().required(),
+    businessName: string().required(),
     type: string().required(),
     addressLine1: string().required(),
     addressLine2: string().required(),
@@ -37,23 +40,62 @@ export default () => {
     );
 
     const handleSubmit = async () => {
-        console.log(value)
-
         setErrors({})
         const errs = await validate(userSchema, value)
         setErrors(errs)
         if (Object.keys(errs).length === 0) {
-            console.log(value)
+            handleUpload();
         }
+    }
+
+    const db = useFirestore();
+    const { data: signInCheckResult } = useSigninCheck();
+
+    const docRef = doc(db, 'users', signInCheckResult?.user?.uid);
+    const response = useFirestoreDocData(docRef);
+
+    const navigateTo = useNavigate();
+    useEffect(() => {
+        response?.data?.userRole === "customer" && navigateTo("/customer");
+        response?.data?.business !== undefined && navigateTo("/business");
+    }, [response?.data]);
+
+
+    const handleUpload = async () => {
+        const address = `${value.addressLine1}, ${value.addressLine2}, ${value.city}, ${value.postcode}`;
+        const coords = await geocode(address);
+
+        if (coords === null) {
+            setErrors({
+                addressLine1: ["Address not found"],
+                addressLine2: ["Address not found"],
+                city: ["Address not found"],
+                postcode: ["Address not found"]
+            });
+            return;
+        }
+
+        await updateDoc(doc(db, "users", signInCheckResult?.user?.uid), {
+            business: {
+                name: value.businessName,
+                type: value.type,
+                location: coords
+            }
+        });
+
+        navigateTo("/business");
     }
 
     return (
         <Stack
             sx={{
-                width: '25ch',
+                width: 'clamp(300px, 60vw, 500px)',
             }}
             spacing={2}
- >
+        >
+            <Typography textAlign="center" component="h1" variant="h4">
+                Business details:
+            </Typography>
             <FormField
                 required
                 error={errors}
@@ -116,7 +158,7 @@ export default () => {
                 value={value}
                 onChange={setValue}
             />
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button onClick={handleSubmit} variant="contained">Submit</Button>
         </Stack >
 
     );
