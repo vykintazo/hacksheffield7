@@ -6,14 +6,15 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import { useFirestore, useFirestoreCollectionData, useFirebaseApp, useSigninCheck } from 'reactfire';
+import { useFirestore, useFirestoreCollectionData, useFirebaseApp, useSigninCheck, useFirestoreDocData } from 'reactfire';
 import { collection, query, doc, deleteDoc } from "firebase/firestore";
 import { CircularProgress, Button, Box } from '@mui/material';
 import { format } from "date-fns";
 import { IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getAuth } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+
+import { useEffect, useState } from 'react';
 import Countdown from './Countdown';
 
 export default function BasicTable() {
@@ -37,10 +38,17 @@ export default function BasicTable() {
         await deleteDoc(doc(firestore, "offers", id));
     }
 
+    const db = useFirestore();
     const { data: signInCheckResult } = useSigninCheck();
 
-    const navigateTo = useNavigate();
-    signInCheckResult?.signedIn === false && navigateTo("/auth");
+    const docRef = doc(db, 'users', signInCheckResult?.user?.uid);
+    const response = useFirestoreDocData(docRef);
+
+    const [companyName, setCompanyName] = useState(<CircularProgress />);
+
+    useEffect(() => {
+        response?.data && setCompanyName(response?.data?.business?.name);
+    }, [response?.data]);
 
     return (
         <><Button onClick={() => authInstance.signOut()} variant="contained" sx={{ backgroundColor: "red", position: "absolute", top: 20, right: 20 }}>Log Out</Button>
@@ -49,7 +57,7 @@ export default function BasicTable() {
                     <CircularProgress />
                 </Box>}
             {status !== "loading" &&
-                <><Typography variant="h1" sx={{ textAlign: 'center' }}>Company Name </Typography>
+                <><Typography component="h1" variant="h3" sx={{ textAlign: 'center', margin: "30px 0" }}>{companyName}</Typography>
                     <TableContainer component={Paper}>
                         <Table sx={{
                             width: '80vw',
