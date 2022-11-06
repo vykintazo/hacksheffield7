@@ -1,14 +1,8 @@
-import Map, { GeolocateControl, Marker } from "react-map-gl";
+import Map, {GeolocateControl} from "react-map-gl";
 import MenuBar from "./MenuBar";
 import VenueMarker from "../components/VenueMarker";
-import { getAuth } from "firebase/auth";
-import { useFirebaseApp, useSigninCheck, useFirestore, useFirestoreDocData } from "reactfire";
-import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { doc } from "firebase/firestore";
 import {getAuth} from "firebase/auth";
-import {useFirebaseApp, useFirestore, useFirestoreCollectionData, useSigninCheck} from "reactfire";
+import {useFirebaseApp, useFirestore, useFirestoreCollectionData, useFirestoreDocData, useSigninCheck} from "reactfire";
 import {Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
@@ -100,9 +94,9 @@ export default function CustomerPage() {
                     }}
                 />
                 {businesses.map((businessUser, i) => {
-                    const { business, uid } = businessUser
+                    const {business, uid} = businessUser
 
-                    return(
+                    return (
                         <VenueMarker
                             key={uid}
                             lon={business.location.lon}
