@@ -7,8 +7,9 @@ import Typography from '@mui/material/Typography';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import {Button, Divider, IconButton, List, ListItemButton, ListItemText, Stack} from "@mui/material";
 import {ArrowBack} from "@mui/icons-material";
-import Countdown from '../business/Countdown.jsx';
 import distance from "@turf/distance";
+import {capitalize} from "../components/FormField.jsx";
+import Countdown from "../business/Countdown.jsx"
 
 const drawerBleeding = 56;
 
@@ -41,7 +42,7 @@ const getDistance = (currLocation, businessLocation, format = true) => {
     return `${kmDist.toFixed(1)} km`;
 }
 
-export default function MenuBar({ businesses, offers, selectedBusiness, onSelectedBusinessChange, mapInstance }) {
+export default function MenuBar({businesses, offers, selectedBusiness, onSelectedBusinessChange, mapInstance}) {
     const [open, setOpen] = useState(false);
 
     const toggleDrawer = (newOpen) => () => {
@@ -137,10 +138,10 @@ export default function MenuBar({ businesses, offers, selectedBusiness, onSelect
                             return (
                                 <ListItemButton key={uid} onClick={() => {
                                     onSelectedBusinessChange(businessUser);
-                                    mapInstance.current.flyTo({ 
-                                        center: [business?.location?.lon, 
-                                        business?.location?.lat],
-                                        zoom: 17 
+                                    mapInstance.current.flyTo({
+                                        center: [business?.location?.lon,
+                                            business?.location?.lat],
+                                        zoom: 17
                                     });
                                 }}>
                                     <ListItemText
@@ -156,11 +157,18 @@ export default function MenuBar({ businesses, offers, selectedBusiness, onSelect
                         <Box sx={{width: '100%'}}>
                             <Stack direction="row" alignItems="center" sx={{width: '100%'}}>
                                 <IconButton onClick={() => onSelectedBusinessChange(null)}><ArrowBack/></IconButton>
-                                <Typography
-                                    sx={{flexGrow: 1}}
-                                    variant="h6">
-                                    {selectedBusiness.business.name}
-                                </Typography>
+                                <Stack direction="row" alignItems="baseline" sx={{flexGrow: 1}}>
+                                    <Typography
+                                        variant="h6"
+                                        sx={{mr: 1}}
+                                    >
+                                        {selectedBusiness.business.name}
+                                    </Typography>
+                                    <Typography
+                                        variant="caption">
+                                        {capitalize(selectedBusiness.business.type)}
+                                    </Typography>
+                                </Stack>
                             </Stack>
                             <List>
                                 {offers?.filter((offer) => offer.uid === selectedBusiness.uid)?.map((offer) => {
