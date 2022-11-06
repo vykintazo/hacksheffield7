@@ -126,7 +126,6 @@ export default () => {
             />
 
             <FormField
-                required
                 error={errors}
                 id="outlined-required"
                 label="addressLine2"
