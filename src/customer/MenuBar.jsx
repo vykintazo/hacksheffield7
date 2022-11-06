@@ -126,7 +126,7 @@ export default function MenuBar({ businesses, offers, selectedBusiness, onSelect
                                             <ListItemText
                                                 sx={{ backgroundColor: countdownChange[offer.id] <= 0 ? "lightgray" : "inherit" }}
                                                 disableTypography
-                                                primary={<><Typography variant="p" sx={{ color: "#b31f02" }}>Time left: <Countdown
+                                                primary={<><Typography variant="p" sx={{ color: "#b31f02", fontWeight: "700" }}>Time left: <Countdown
                                                     targetDate={offer.end?.toDate()}
                                                     onCountdownChange={(change) => {
                                                         setCountDownChange((prev) => ({
