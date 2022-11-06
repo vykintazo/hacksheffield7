@@ -15,9 +15,9 @@ const initialValue = {
 }
 
 const types = [
-    "Type1",
-    "Type2",
-    "Type3"
+    "Pub",
+    "Fashion",
+    "Café",
 ]
 
 let userSchema = object({
