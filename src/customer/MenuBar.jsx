@@ -25,7 +25,7 @@ const Puller = styled(Box)(({ theme }) => ({
     left: 'calc(50% - 15px)'
 }));
 
-export default function MenuBar({ businesses, offers, selectedBusiness, onSelectedBusinessChange }) {
+export default function MenuBar({ businesses, offers, selectedBusiness, onSelectedBusinessChange, mapInstance }) {
     const [open, setOpen] = useState(false);
 
     const toggleDrawer = (newOpen) => () => {
@@ -103,7 +103,10 @@ export default function MenuBar({ businesses, offers, selectedBusiness, onSelect
                             const { business, uid } = businessUser;
                             const businessOffers = offers?.filter((offer) => offer.uid === uid);
                             return (
-                                <ListItemButton key={uid} onClick={() => onSelectedBusinessChange(businessUser)}>
+                                <ListItemButton key={uid} onClick={() => {
+                                    onSelectedBusinessChange(businessUser);
+                                    mapInstance.current.flyTo({ center: [business?.location?.lon, business?.location?.lat] });
+                                }}>
                                     <ListItemText
                                         primary={business.name}
                                         secondary={`${businessOffers.length} offer(s) available.`} />
