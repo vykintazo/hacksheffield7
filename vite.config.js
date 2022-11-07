@@ -4,6 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  envPrefix: 'APP_',
   plugins: [react(), VitePWA({
     manifest: {
       name: 'DiscountMapper',

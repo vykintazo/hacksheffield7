@@ -73,7 +73,7 @@ export default function CustomerPage() {
                 ref={mapInstance}
                 style={{ width: '100vw', height: '100vh' }}
                 mapStyle="mapbox://styles/illuminatiboat/cla42292y00ns14p07a4ipgzp"
-                mapboxAccessToken=import.meta.env.APP_MAPBOX_TOKEN
+                mapboxAccessToken={import.meta.env.APP_MAPBOX_TOKEN}
             >
                 <Button onClick={() => authInstance.signOut()} variant="contained"
                     sx={{ backgroundColor: "red", position: "absolute", top: 20, right: 20 }}>Log Out</Button>

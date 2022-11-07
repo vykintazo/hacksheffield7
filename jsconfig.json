@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
       "moduleResolution": "NodeNext",
-      "module": "ES6",
+      "module": "ESNext",
       "jsx": "preserve",
       "checkJs": true,
       "baseUrl": "./src"
