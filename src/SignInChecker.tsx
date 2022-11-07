@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 
-
-export default () => {
+export default function SignInChecker() {
    
     const navigateTo = useNavigate();
     const { status, data: signInCheckResult } = useSigninCheck();

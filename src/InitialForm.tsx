@@ -6,7 +6,7 @@ import { useSigninCheck, useFirestore, useFirestoreDocData, useFirebaseApp } fro
 import { useNavigate } from "react-router-dom";
 
 
-export default () => {
+export default function InitialForm() {
     const db = useFirestore();
     const { data: signInCheckResult } = useSigninCheck();
 

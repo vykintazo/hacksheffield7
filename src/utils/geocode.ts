@@ -1,9 +1,7 @@
 /**
  * Returns an object or null based on given address string.
- * @param address {string}
- * @return {{ lat: number, lon: number } | null}
  * */
-export default async function geocode(address) {
+export default async function geocode(address: string) {
     const baseUrl = 'https://nominatim.openstreetmap.org/search';
     try {
         const response = await fetch(`${baseUrl}?q=${address}&format=json&limit=1`);

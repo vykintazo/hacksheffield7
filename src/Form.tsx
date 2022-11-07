@@ -7,7 +7,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import BusinessForm from "./forms/BusinessForm";
 
 
-export default () => {
+export default function Form() {
     const db = useFirestore();
     const { data: signInCheckResult } = useSigninCheck();
 
@@ -19,7 +19,7 @@ export default () => {
     const docRef = doc(db, 'users', signInCheckResult?.user?.uid);
     const response = useFirestoreDocData(docRef);
 
-    const [userType, setUserType] = useState(false);
+    const [userType, setUserType] = useState<string | false>(false);
 
     useEffect(() => {
         if (userType === false) {

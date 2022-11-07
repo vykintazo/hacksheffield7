@@ -11,4 +11,4 @@ export const categoryConfig = {
     "Greengrocer": {
         color: "#35870f"
     }
-};
+} as const;
